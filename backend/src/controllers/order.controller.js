@@ -4,6 +4,7 @@ exports.createOrder = async (req, res) => {
   try {
     console.log("Request Body:", req.body); // <- log request
     const order = await Order.create({
+      userId: req.user._id,
       partnerId: req.body.partnerId,
       foodId: req.body.foodId,
       qty: req.body.qty,
@@ -25,7 +26,7 @@ exports.createOrder = async (req, res) => {
 // 🟡 GET ALL ORDERS FOR ONE PARTNER
 exports.getPartnerOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ partnerId: req.params.id }).sort({
+    const orders = await Order.find({ partnerId: req.foodPartner._id }).sort({
       createdAt: -1,
     });
 
@@ -39,15 +40,34 @@ exports.getPartnerOrders = async (req, res) => {
 // 🔵 UPDATE ORDER STATUS
 exports.updateOrderStatus = async (req, res) => {
   try {
+    const updateData = { status: req.body.status };
+    if (req.body.deliveryTime) {
+      updateData.deliveryTime = req.body.deliveryTime;
+    }
+
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.id,
-      { status: req.body.status },
+      updateData,
       { new: true }
     );
 
     res.json({ success: true, order: updatedOrder });
   } catch (error) {
     console.error("Error updating order status:", error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// 🟢 GET ALL ORDERS FOR ONE USER
+exports.getUserOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ userId: req.user._id }).sort({
+      createdAt: -1,
+    }).populate('foodId'); // Populate food info if needed
+
+    res.json({ success: true, orders });
+  } catch (error) {
+    console.error("Error fetching user orders:", error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 };
