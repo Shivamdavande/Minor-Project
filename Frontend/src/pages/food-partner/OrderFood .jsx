@@ -13,8 +13,27 @@ const OrderFood = () => {
   const itemTotal = qty * Number(item.price);
   const totalBill = itemTotal + deliveryFee;
 
-  const handleclick = () => {
-    alert(`Order placed for ${qty} x ${item.title}\nTotal: ₹${totalBill}\nDelivery Address: ${address}`);
+  const handleclick = async () => {
+    if (!address.trim()) return alert("Please enter a delivery address");
+    try {
+      const axios = (await import('axios')).default;
+      const res = await axios.post("http://localhost:3000/api/order/create", {
+        partnerId: item.foodPartner || item.partnerId,
+        foodId: item._id,
+        qty,
+        totalBill,
+        address,
+        video: item.video,
+        title: item.name || item.title
+      }, { withCredentials: true });
+      if (res.data.success) {
+        alert("Order placed successfully!");
+        window.location.href = "/orders"; // redirect to user orders page
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to place order.");
+    }
   }
 
   return (

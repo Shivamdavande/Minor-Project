@@ -13,14 +13,22 @@ const UserLogin = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const response = await axios.post("http://localhost:3000/api/auth/user/login", {
-      email,
-      password
-    }, { withCredentials: true });
+    try {
+      const response = await axios.post("http://localhost:3000/api/auth/user/login", {
+        email,
+        password
+      }, { withCredentials: true });
 
-    console.log(response.data);
-
-    navigate("/"); // Redirect to home after login
+      console.log(response.data);
+      window.location.href = "/home"; // Redirect to home after login
+    } catch (err) {
+      console.error("Login error:", err);
+      if (err.response && err.response.data && err.response.data.message) {
+        alert("Login failed: " + err.response.data.message);
+      } else {
+        alert("Login failed. Please check your credentials and try again.");
+      }
+    }
 
   };
 
@@ -44,6 +52,9 @@ const UserLogin = () => {
         </form>
         <div className="auth-alt-action">
           New here? <a href="/user/register">Create account</a>
+        </div>
+        <div className="auth-alt-action" style={{ marginTop: '10px' }}>
+          Are you a food partner? <a href="/food-partner/login">Login here</a>
         </div>
       </div>
     </div>

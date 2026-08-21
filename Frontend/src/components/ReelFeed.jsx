@@ -55,7 +55,15 @@ const ReelFeed = ({ items = [], onLike, onSave, emptyMessage = 'No videos yet.' 
             />
 
             <div className="reel-overlay">
-              <div className="reel-overlay-gradient" aria-hidden="true" />
+              <div 
+                className="reel-overlay-gradient" 
+                aria-hidden="true" 
+                title="Tap to toggle sound"
+                onClick={(e) => {
+                  const video = e.currentTarget.closest('.reel').querySelector('video');
+                  if (video) video.muted = !video.muted;
+                }}
+              />
               <div className="reel-actions">
                 <div className="reel-action-group">
                   <button
@@ -63,11 +71,20 @@ const ReelFeed = ({ items = [], onLike, onSave, emptyMessage = 'No videos yet.' 
                     className="reel-action"
                     aria-label="Like"
                   >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill={item.isLiked ? "#ff3040" : "none"} stroke={item.isLiked ? "#ff3040" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
                       <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 22l7.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
                     </svg>
                   </button>
                   <div className="reel-action__count">{item.likeCount ?? item.likesCount ?? item.likes ?? 0}</div>
+                </div>
+
+                <div className="reel-action-group">
+                  <button className="reel-action" aria-label="Comments">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
+                      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+                    </svg>
+                  </button>
+                  <div className="reel-action__count">{item.commentsCount ?? (Array.isArray(item.comments) ? item.comments.length : 0)}</div>
                 </div>
 
                 <div className="reel-action-group">
@@ -76,21 +93,11 @@ const ReelFeed = ({ items = [], onLike, onSave, emptyMessage = 'No videos yet.' 
                     onClick={() => onSave && onSave(item)} // safer
                     aria-label="Bookmark"
                   >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill={item.isSaved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
                       <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
                     </svg>
                   </button>
                   <div className="reel-action__count">{Number(item.savesCount ?? 0)}</div>
-                </div>
-
-
-                <div className="reel-action-group">
-                  <button className="reel-action" aria-label="Comments">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
-                    </svg>
-                  </button>
-                  <div className="reel-action__count">{item.commentsCount ?? (Array.isArray(item.comments) ? item.comments.length : 0)}</div>
                 </div>
               </div>
 
@@ -103,17 +110,18 @@ const ReelFeed = ({ items = [], onLike, onSave, emptyMessage = 'No videos yet.' 
                   </p>
                 )}
 
-                <div className='flex gap-2 '>
+                <div className='flex items-center gap-3 mt-3'>
                   {item.foodPartner && (
-                    <Link className="reel-btn" to={"/food-partner/" + item.foodPartner} aria-label="Visit store">Visit store</Link>
+                    <Link className="px-5 py-3 rounded-xl bg-white text-black font-extrabold text-[15px] shadow-[0_8px_16px_rgba(0,0,0,0.25)] transition-transform hover:scale-105 active:scale-95 flex-1 text-center" to={"/food-partner/" + item.foodPartner} aria-label="Visit store">
+                      Visit store
+                    </Link>
                   )}
                   <button
                     onClick={() => navigate("/order", { state: item })}
-                    className="reel-btn"
+                    className="px-5 py-3 rounded-xl bg-[#E23744] text-white font-extrabold text-[15px] shadow-[0_8px_16px_rgba(226,55,68,0.4)] transition-transform hover:scale-105 active:scale-95 flex-1 text-center"
                   >
                     Order Food
                   </button>
-
                 </div>
 
               </div>

@@ -8,7 +8,7 @@ const FoodPartnerRegister = () => {
 
   const navigate = useNavigate();
   
-  const handleSubmit = (e) => { 
+  const handleSubmit = async (e) => { 
     e.preventDefault();
 
     const businessName = e.target.businessName.value;
@@ -18,21 +18,26 @@ const FoodPartnerRegister = () => {
     const password = e.target.password.value;
     const address = e.target.address.value;
 
-    axios.post("http://localhost:3000/api/auth/food-partner/register", {
-      name:businessName,
-      contactName,
-      phone,
-      email,
-      password,
-      address
-    }, { withCredentials: true })
-      .then(response => {
-        console.log(response.data);
-        navigate("/create-food"); 
-      })
-      .catch(error => {
-        console.error("There was an error registering!", error);
-      });
+    try {
+      const response = await axios.post("http://localhost:3000/api/auth/food-partner/register", {
+        name:businessName,
+        contactName,
+        phone,
+        email,
+        password,
+        address
+      }, { withCredentials: true });
+      
+      console.log(response.data);
+      window.location.href = "/create-food"; 
+    } catch (err) {
+      console.error("There was an error registering!", err);
+      if (err.response && err.response.data && err.response.data.message) {
+        alert("Registration failed: " + err.response.data.message);
+      } else {
+        alert("Registration failed. Please check your details.");
+      }
+    }
   };
 
   return (

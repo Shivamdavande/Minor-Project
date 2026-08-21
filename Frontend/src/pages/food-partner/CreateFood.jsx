@@ -67,7 +67,8 @@ const CreateFood = () => {
         window.updateVideos(response.data.food);
     }
 
-    navigate("/"); // Redirect after successful creation
+    // Redirect to the food partner's profile page instead of '/'
+    navigate(`/food-partner/profile/${response.data.food.foodPartner}`);
 };
 
 

@@ -17,18 +17,26 @@ const UserRegister = () => {
         const password = e.target.password.value;
 
 
-        const response = await axios.post("http://localhost:3000/api/auth/user/register", {
-            fullName: firstName + " " + lastName,
-            email,
-            password
-        },
-        {
-            withCredentials: true
-        })
+        try {
+            const response = await axios.post("http://localhost:3000/api/auth/user/register", {
+                fullName: firstName + " " + lastName,
+                email,
+                password
+            },
+            {
+                withCredentials: true
+            })
 
-        console.log(response.data);
-
-        navigate("/")
+            console.log(response.data);
+            window.location.href = "/home";
+        } catch (err) {
+            console.error("Registration error:", err);
+            if (err.response && err.response.data && err.response.data.message) {
+                alert("Registration failed: " + err.response.data.message);
+            } else {
+                alert("Registration failed. Please check your details and try again.");
+            }
+        }
 
     };
 

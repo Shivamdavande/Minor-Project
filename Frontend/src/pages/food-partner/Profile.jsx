@@ -8,6 +8,8 @@ const Profile = () => {
   const [videos, setVideos] = useState([]);
   const navigate = useNavigate();
 
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
   useEffect(() => {
     axios
       .get(`http://localhost:3000/api/food-partner/${id}`, {
@@ -69,18 +71,45 @@ const Profile = () => {
       {videos.map((v) => (
         <div
           key={v._id}
-          className="aspect-square bg-black overflow-hidden"
+          className="aspect-square bg-black overflow-hidden cursor-pointer relative group"
+          onClick={() => setSelectedVideo(v)}
         >
           <video
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover pointer-events-none"
             src={v.video}
             muted
-            loop
-            autoPlay
-          ></video>
+            playsInline
+            preload="metadata"
+          />
+          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+            <svg className="w-8 h-8 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
         </div>
       ))}
     </section>
+
+    {/* VIDEO MODAL */}
+    {selectedVideo && (
+      <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+        <button
+          className="absolute top-4 right-4 text-white z-50 p-2 bg-neutral-800 rounded-full hover:bg-neutral-700"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <video
+          className="w-full max-h-screen"
+          src={selectedVideo.video}
+          controls
+          autoPlay
+          playsInline
+        />
+      </div>
+    )}
   </main>
 
 

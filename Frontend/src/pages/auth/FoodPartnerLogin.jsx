@@ -30,7 +30,7 @@ const FoodPartnerLogin = () => {
 
     const partner = response.data.foodPartner;
 
-    navigate(`/food-partner/profile/${partner._id}`);
+    window.location.href = `/food-partner/profile/${partner._id}`;
   } 
   catch (err) {
     console.error("Login Error:", err);
@@ -60,6 +60,9 @@ const FoodPartnerLogin = () => {
         </form>
         <div className="auth-alt-action">
           New partner? <a href="/food-partner/register">Create an account</a>
+        </div>
+        <div className="auth-alt-action" style={{ marginTop: '10px' }}>
+          Are you a normal user? <a href="/user/login">Login here</a>
         </div>
       </div>
     </div>
