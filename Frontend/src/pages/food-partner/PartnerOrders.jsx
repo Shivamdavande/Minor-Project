@@ -6,7 +6,7 @@ const PartnerOrders = () => {
 
   useEffect(() => {
     // We will update the backend to not require :id and use the token's ID.
-    axios.get("http://localhost:3000/api/order/partner/me", { withCredentials: true })
+    axios.get("/api/order/partner/me", { withCredentials: true })
       .then(res => setOrders(res.data.orders))
       .catch(err => console.error("Error fetching orders:", err));
   }, []);
@@ -19,7 +19,7 @@ const PartnerOrders = () => {
     }
     
     try {
-      await axios.put(`http://localhost:3000/api/order/status/${orderId}`, { status, deliveryTime }, { withCredentials: true });
+      await axios.put(`/api/order/status/${orderId}`, { status, deliveryTime }, { withCredentials: true });
       setOrders(orders.map(o => o._id === orderId ? { ...o, status, deliveryTime } : o));
     } catch (err) {
       console.error(err);

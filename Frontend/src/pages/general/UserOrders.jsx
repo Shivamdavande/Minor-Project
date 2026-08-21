@@ -5,7 +5,7 @@ const UserOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/order/user", { withCredentials: true })
+    axios.get("/api/order/user", { withCredentials: true })
       .then(res => setOrders(res.data.orders))
       .catch(err => console.error("Error fetching orders:", err));
   }, []);

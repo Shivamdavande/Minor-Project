@@ -12,7 +12,7 @@ const FoodPartnerProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/food-partner/${id}`, { withCredentials: true })
+      .get(`/api/food-partner/${id}`, { withCredentials: true })
       .then((res) => {
         setProfile(res.data.foodPartner);
         setVideos(res.data.foodPartner.foodItems);
@@ -29,7 +29,7 @@ const FoodPartnerProfile = () => {
         className="absolute top-6 right-6 px-4 py-2 bg-red-600/80 hover:bg-red-700 text-white text-sm font-semibold rounded-lg shadow-md transition-colors"
         onClick={async () => {
           try {
-            await axios.get("http://localhost:3000/api/auth/food-partner/logout", { withCredentials: true });
+            await axios.get("/api/auth/food-partner/logout", { withCredentials: true });
             window.location.href = "/food-partner/login";
           } catch (err) {
             console.error(err);

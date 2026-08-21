@@ -9,7 +9,7 @@ const [videos, setVideos] = useState([])
 
 useEffect(() => {
     axios
-        .get("http://localhost:3000/api/food/save", { withCredentials: true })
+        .get("/api/food/save", { withCredentials: true })
         .then(response => {
 
             const savedFoods = (response.data.savedFoods || [])
@@ -31,7 +31,7 @@ useEffect(() => {
 const removeSaved = async (item) => {
     try {
         await axios.post(
-            "http://localhost:3000/api/food/save",
+            "/api/food/save",
             { foodId: item._id },
             { withCredentials: true }
         )

@@ -17,7 +17,7 @@ const OrderFood = () => {
     if (!address.trim()) return alert("Please enter a delivery address");
     try {
       const axios = (await import('axios')).default;
-      const res = await axios.post("http://localhost:3000/api/order/create", {
+      const res = await axios.post("/api/order/create", {
         partnerId: item.foodPartner || item.partnerId,
         foodId: item._id,
         qty,
