@@ -52,17 +52,13 @@ const ReelFeed = ({ items = [], onLike, onSave, emptyMessage = 'No videos yet.' 
               playsInline
               loop
               preload="metadata"
+              onClick={(e) => { e.currentTarget.muted = !e.currentTarget.muted; }}
             />
 
             <div className="reel-overlay">
               <div 
                 className="reel-overlay-gradient" 
                 aria-hidden="true" 
-                title="Tap to toggle sound"
-                onClick={(e) => {
-                  const video = e.currentTarget.closest('.reel').querySelector('video');
-                  if (video) video.muted = !video.muted;
-                }}
               />
               <div className="reel-actions">
                 <div className="reel-action-group">
